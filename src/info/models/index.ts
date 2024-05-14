@@ -38,6 +38,7 @@ export class UpdateUserInfoRequest implements UpdateUserInfoRequestInterface {
   @ValidateIf((o, value) => value !== undefined)
   married?: boolean;
 
+  @IsNotEmpty()
   @IsDateString()
   birthdate: string;
 }
