@@ -4,6 +4,7 @@ import { validate } from 'class-validator';
 import { UpdateInfoRequest as UpdateInfoRequestInterface } from './interfaces';
 import { BaseResponse } from '../interfaces';
 import { UpdateInfoRequest, UpdateUserInfoRequest } from './models';
+import { validateBirthdateMatchesAge } from './custom/function';
 
 @Injectable()
 export class InfoService {
@@ -29,6 +30,8 @@ export class InfoService {
   ): Promise<BaseResponse> {
     const data = plainToClass(UpdateUserInfoRequest, rawData);
     const validationErrors = await validate(data);
+    const customErrors = validateBirthdateMatchesAge(data);
+    if (customErrors.length > 0) validationErrors.push(...customErrors);
 
     if (validationErrors.length > 0) {
       return {
